@@ -47,12 +47,12 @@ class Portainer(object):
             logging.info("Portainer Login succeeded!")
             self.jwt_token = response.json()['jwt']
             return True
-        else:
-            logging.error("Portainer login failed!")
-            logging.debug(response.__dict__)
-            logging.debug(response.request.__dict__)
-            logging.debug(response.history[0].__dict__)
-            return False
+
+        logging.error("Portainer login failed!")
+        logging.debug(response.__dict__)
+        logging.debug(response.request.__dict__)
+        logging.debug(response.history[0].__dict__)
+        return False
 
     def get_endpoints(self):
         """Get all endpoints from portainer API
@@ -70,11 +70,11 @@ class Portainer(object):
             logging.info("Get %d endpoints from portainer",
                          len(self.endpoints))
             return self.endpoints
-        else:
-            logging.error("Can't get endpoints, status %d",
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't get endpoints, status %d",
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def get_teams(self):
         """Get all teams from portainer API
@@ -92,11 +92,11 @@ class Portainer(object):
             logging.info("Get %d teams from portainer",
                          len(self.teams))
             return self.teams
-        else:
-            logging.error("Can't get teams, status %d",
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't get teams, status %d",
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def get_users(self):
         """Get all users from portainer API
@@ -114,11 +114,11 @@ class Portainer(object):
             logging.info("Get %d users from portainer",
                          len(self.users))
             return self.teams
-        else:
-            logging.error("Can't get users, status %d",
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't get users, status %d",
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def get_team_memberships(self):
         """Get all team memberships from portainer API
@@ -136,11 +136,11 @@ class Portainer(object):
             logging.info("Get %d team memberships from portainer",
                          len(self.team_memberships))
             return self.team_memberships
-        else:
-            logging.error("Can't get team memberships, status %d",
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't get team memberships, status %d",
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def create_endpoint(self, name, url, tls=True):
         """Create endpoint in portainer
@@ -176,12 +176,12 @@ class Portainer(object):
                 name, response_json['Id'])
             # TODO: Add full data endpoint to cache
             return response_json
-        else:
-            logging.error("Can't create endpoint %s, status %d",
-                          name,
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't create endpoint %s, status %d",
+                      name,
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def create_team(self, name):
         """Create team in portainer
@@ -211,12 +211,12 @@ class Portainer(object):
             logging.info("Teams %s created in portainer with id %d",
                          name, response_json['Id'])
             return response_json
-        else:
-            logging.error("Can't create team %s, status %d",
-                          name,
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't create team %s, status %d",
+                      name,
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def create_user(self, username, is_admin=False):
         """Create user in portainer
@@ -250,12 +250,12 @@ class Portainer(object):
             logging.info("User %s created in portainer with id %d",
                          username, response_json['Id'])
             return response_json
-        else:
-            logging.error("Can't create user %s, status %d",
-                          username,
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't create user %s, status %d",
+                      username,
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def create_team_memberships(self, user_id, team_id, role_id):
         """Create user in portainer
@@ -297,11 +297,11 @@ class Portainer(object):
                 "with roleid %d created with id %d",
                 user_id, team_id, role_id, response_json['Id'])
             return response_json
-        else:
-            logging.error("Can't create team membership, status %d",
-                          response.status_code)
-            logging.debug(response.__dict__)
-            return None
+
+        logging.error("Can't create team membership, status %d",
+                      response.status_code)
+        logging.debug(response.__dict__)
+        return None
 
     def upload_tls(self, endpoint_id, certificate, upload_file):
         """Add TLS files to endpoint
@@ -362,8 +362,8 @@ class Portainer(object):
                           response.status_code)
             logging.debug(response.__dict__)
             return False
-        else:
-            logging.error("Fail to set endpoint access on %d: Status: %d",
-                          endpoint_id, response.status_code)
-            logging.debug(response.__dict__)
-            return False
+
+        logging.error("Fail to set endpoint access on %d: Status: %d",
+                      endpoint_id, response.status_code)
+        logging.debug(response.__dict__)
+        return False
