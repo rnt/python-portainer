@@ -38,8 +38,13 @@ venv: ## Create virtualenv
 	@python3 -m venv venv
 	@venv/bin/pip install --quiet --upgrade pip
 	@venv/bin/pip install --quiet --upgrade setuptools
+	@venv/bin/pip install --quiet --upgrade pycodestyle pylint
 	@venv/bin/pip install --quiet requests
 	@echo -e "\nNow run: source venv/bin/activate\n"
+
+check: venv ## Run code check
+	venv/bin/pycodestyle --exclude=venv/*
+	venv/bin/pylint --ignore=venv portainer
 
 rpm: venv ## Create module rpm
 	@python3 setup.py bdist_rpm
