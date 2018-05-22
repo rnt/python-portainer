@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='portainer',
     packages=['portainer'],
-    version='0.1',
+    version='0.1-beta',
     description='Python module to interact with the Portainer API',
     author='Renato Covarrubias',
     author_email='rnt@rnt.cl',
