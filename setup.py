@@ -1,7 +1,7 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
-    name='python-portainer',
+    name='portainer',
     packages=['portainer'],
     version='0.1',
     description='Python module to interact with the Portainer API',

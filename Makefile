@@ -33,18 +33,29 @@ clean-docs:
 docs:
 	@$(MAKE) -C docs html
 
-venv: ## Create virtualenv
-	@echo "Creating venv..."
-	@python3 -m venv venv
-	@venv/bin/pip install --quiet --upgrade pip
-	@venv/bin/pip install --quiet --upgrade setuptools
-	@venv/bin/pip install --quiet --upgrade pycodestyle pylint
-	@venv/bin/pip install --quiet requests
+venv: requirements.txt ## Create virtualenv
+	@test -d venv || @echo "Creating venv..."
+	@test -d venv || @python3 -m venv venv
+	@venv/bin/pip install --quiet --upgrade pip setuptools
+	@venv/bin/pip install --quiet --requirement requirements.txt
 	@echo -e "\nNow run: source venv/bin/activate\n"
 
-check: venv ## Run code check
+lint: venv ## Run code lint checks
 	venv/bin/pycodestyle --exclude=venv/*
 	venv/bin/pylint --ignore=venv portainer
 
 rpm: venv ## Create module rpm
-	@python3 setup.py bdist_rpm
+	@venv/bin/python3 setup.py bdist_rpm
+
+pip-compile: venv ## Generate requirements.txt from requirements.in
+	@venv/bin/pip-compile --output-file requirements.txt requirements.in
+
+autopep8: venv ## Run autopep8
+	find . -iname '*.py' -not -path './venv/*' -and -not -path './build/*' | xargs --max-args=1 venv/bin/autopep8 -i
+
+build: venv ## Build artifact
+	venv/bin/python3 setup.py sdist
+	venv/bin/python3 setup.py bdist_wheel
+
+upload: build ## Upload to pypi
+	venv/bin/twine upload dist/*
