@@ -8,6 +8,7 @@ import requests
 class Portainer(object):
     "Script object to interact with portainer API"
     # pylint: disable=too-many-instance-attributes,too-many-arguments
+
     def __init__(self, baseurl, username, password):
         """Portainer object constructor
 
