@@ -10,7 +10,7 @@ test:
 
 coverage:
 	@rm -f .coverage
-	@nosetests --with-coverage --cover-package=safe --cover-html
+	@nosetests --with-coverage --cover-package=portainer --cover-html
 
 clean: clean-build clean-pyc clean-docs ## Clean all
 
