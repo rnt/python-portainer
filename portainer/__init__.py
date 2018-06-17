@@ -24,17 +24,12 @@ class Portainer(object):
         self.teams = None
         self.team_memberships = None
 
-        self.__login(username, password)
+        self.auth(username, password)
 
-    def get_all_data(self):
-        "Get all portainer data"
-        self.get_endpoints()
-        self.get_teams()
-        self.get_users()
-        self.get_team_memberships()
+    def auth(self, username, password):
+        """Authenticate against Portainer using a username and password.abs
 
-    def __login(self, username, password):
-        """Get JWT token from portainer Auth
+        Store JWT token in current object.
 
         :param str username: Username to authenticate
         :param str passworwd: User password
@@ -45,14 +40,14 @@ class Portainer(object):
             "%s/auth" % self.baseurl,
             json={'Username': username, 'Password': password})
         if response.status_code == 200:
-            logging.info("Portainer Login succeeded!")
+            logging.info("Login succeeded at %s", self.baseurl)
             self.jwt_token = response.json()['jwt']
             return True
 
-        logging.error("Portainer login failed!")
+        logging.error(
+            "Login failed at %s: %s",
+            self.baseurl, response.json()['err'])
         logging.debug(response.__dict__)
-        logging.debug(response.request.__dict__)
-        logging.debug(response.history[0].__dict__)
         return False
 
     def get_endpoints(self):
