@@ -12,7 +12,7 @@ class Portainer(object):
     def __init__(self, baseurl, username, password):
         """Portainer object constructor
 
-        :param str baseurl: Portainer base url
+        :param str baseurl: Portainer base url. Ex: portainer.domain/api
         :param str username: Username to authenticate
         :param str passworwd: User password
         """
@@ -42,7 +42,7 @@ class Portainer(object):
         :return bool: If the authentication was successful.
         """
         response = requests.post(
-            "%s/api/auth" % self.baseurl,
+            "%s/auth" % self.baseurl,
             json={'Username': username, 'Password': password})
         if response.status_code == 200:
             logging.info("Portainer Login succeeded!")
@@ -64,7 +64,7 @@ class Portainer(object):
         logging.info("Get portainer endpoints...")
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         response = requests.get(
-            "%s/api/endpoints" % self.baseurl,
+            "%s/endpoints" % self.baseurl,
             headers=headers)
         if response.status_code == 200:
             self.endpoints = response.json()
@@ -86,7 +86,7 @@ class Portainer(object):
         logging.info("Get portainer teams...")
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         response = requests.get(
-            "%s/api/teams" % self.baseurl,
+            "%s/teams" % self.baseurl,
             headers=headers)
         if response.status_code == 200:
             self.teams = response.json()
@@ -108,7 +108,7 @@ class Portainer(object):
         logging.info("Get portainer users...")
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         response = requests.get(
-            "%s/api/users" % self.baseurl,
+            "%s/users" % self.baseurl,
             headers=headers)
         if response.status_code == 200:
             self.users = response.json()
@@ -130,7 +130,7 @@ class Portainer(object):
         logging.info("Get portainer team memberships...")
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         response = requests.get(
-            "%s/api/team_memberships" % self.baseurl,
+            "%s/team_memberships" % self.baseurl,
             headers=headers)
         if response.status_code == 200:
             self.team_memberships = response.json()
@@ -161,7 +161,7 @@ class Portainer(object):
             'TLS': tls
         }
         response = requests.post(
-            "%s/api/endpoints" % self.baseurl,
+            "%s/endpoints" % self.baseurl,
             headers=headers,
             json=payload)
         if response.status_code == 200:
@@ -198,7 +198,7 @@ class Portainer(object):
             'Name': name
         }
         response = requests.post(
-            "%s/api/teams" % self.baseurl,
+            "%s/teams" % self.baseurl,
             headers=headers,
             json=payload)
         if response.status_code == 200:
@@ -236,7 +236,7 @@ class Portainer(object):
             'role': {True: 1}.get(is_admin, 2)
         }
         response = requests.post(
-            "%s/api/users" % self.baseurl,
+            "%s/users" % self.baseurl,
             headers=headers,
             json=payload)
         if response.status_code == 200:
@@ -280,7 +280,7 @@ class Portainer(object):
             'UserID': user_id
         }
         response = requests.post(
-            "%s/api/team_memberships" % self.baseurl,
+            "%s/team_memberships" % self.baseurl,
             headers=headers,
             json=payload)
         if response.status_code == 200:
@@ -320,7 +320,7 @@ class Portainer(object):
         #         'ca': open(self.cacert.name, 'rb'),
         #         'cert': open(self.cert.name, 'rb'),
         #         'key': open(self.key.name, 'rb')}.items():
-        url = "%s/api/upload/tls/%s?folder=%s" % (
+        url = "%s/upload/tls/%s?folder=%s" % (
             self.baseurl, certificate, endpoint_id)
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         payload = {'file': open(upload_file, 'rb')}
@@ -344,7 +344,7 @@ class Portainer(object):
         """
         logging.debug("Set access to endpoint %d", endpoint_id)
 
-        url = "%s/api/endpoints/%d/access" % (self.baseurl, endpoint_id)
+        url = "%s/endpoints/%d/access" % (self.baseurl, endpoint_id)
         headers = {'Authorization': 'Bearer %s' % self.jwt_token}
         payload = {
             'AuthorizedUsers': users,
