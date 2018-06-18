@@ -15,6 +15,8 @@ class Portainer(object):
         :param str baseurl: Portainer base url. Ex: portainer.domain/api
         :param str username: Username to authenticate
         :param str passworwd: User password
+
+        :see https://app.swaggerhub.com/apis/deviantony/Portainer/1.17.1/
         """
         self.baseurl = baseurl
         self.jwt_token = None
@@ -48,6 +50,79 @@ class Portainer(object):
             "Login failed at %s: %s",
             self.baseurl, response.json()['err'])
         logging.debug(response.__dict__)
+        return False
+
+    def __get(self, endpoint):
+        '''Calling API with GET method
+
+        :param str endpoint: Endpoint to make the request.
+
+        :return request.Response: Response object
+        '''
+        logging.debug("Calling __get(%s)", endpoint)
+        headers = {
+            'Authorization': 'Bearer %s' % self.jwt_token,
+            'Accept': 'application/json'
+        }
+        response = requests.get(
+            "%s/%s" % (self.baseurl, endpoint),
+            headers=headers)
+        return response
+
+    def __put(self, endpoint, data):
+        '''Calling API with PUT method
+
+        :param str endpoint: Endpoint to make the request.
+
+        :return request.Response: Response object
+        '''
+        logging.debug("Calling __put(%s)", endpoint)
+        headers = {
+            'Authorization': 'Bearer %s' % self.jwt_token,
+            'Accept': 'application/json',
+        }
+        response = requests.put(
+            "%s/%s" % (self.baseurl, endpoint),
+            headers=headers, json=data)
+        return response
+
+    def get_dockerhub(self):
+        """Retrieve the information used to connect to the DockerHub
+
+        :return dict: Dict with dockerhub information
+        """
+        logging.debug("Calling get_dockerhub()")
+        response = self.__get('dockerhub')
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            logging.error(
+                "HTTP code %d: %s",
+                response.status_code,
+                response.json().get('err', 'N/A'))
+        return None
+
+    def put_dockerhub(self, authentication, username, password):
+        """Update the information used to connect to the DockerHub
+
+        :return bool: True if API accept request.
+        """
+        logging.debug("Calling put_dockerhub()")
+        data = {
+            'Authentication': authentication,
+            'Username': username,
+            'Password': password
+        }
+        response = self.__put('dockerhub', data)
+
+        if response.status_code == 200:
+            return True
+        else:
+            logging.error(
+                "HTTP code %d: %s",
+                response.status_code,
+                response.json().get('err', 'N/A'))
         return False
 
     def get_endpoints(self):
